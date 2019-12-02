@@ -11,20 +11,27 @@ O worker não precisa executar os comandos das tarefas de fato (ao invés disso,
  considere uma escala de unidades de segundos).
 Considere que o worker notifica o escalonador sobre os resultados das tarefas (ao invés do scheduler fazer pooling para obtenção dos resultados).
 
-O escalonador possui uma estrutura de dados a qual armazena as atividades em uma fila e é o responsável por executá-las(definir de quem será a CPU no momento x), para isso é necessário um worker o qual adiciona e remove as tarefas na fila e quem executa a tarefa.
+O escalonador possui uma estrutura de dados a qual armazena as atividades e é o responsável por executá-las(definir de quem será a CPU no momento x), para isso é necessário um worker o qual adiciona e remove as tarefas na fila e quem executa a tarefa.
 
 Função do worker:
 * Adicionar ou remover tarefas (cada worker é responsável por uma fila de tarefas)
 * Realizar a função da tarefa
 
 Função do escalonador:
-* Atribuir um worker para uma atividade
-
+* Atribuir uma atividade para um worker
 
 As notificações são emitidas pelo sistima, o escalonador vai receber o evento e tomar as devidas ações:
 * adicionar/remover atividades
+    Atualiza as atividades salvas no escalonador
+    Funções: AddTarefa e RemoveTarefa
 
 * adicionar/remover workers
+    Atualiza a lista de workers salvos no escalonador
+    Funções: CriarWorker e RemoveWorker
+
+* finalização da execução de tarefas
+    Quando uma atividade é finalizada o escalonador verifica as atividades, se possue alguma finalizada caso possua cria um novo job.
+    Função: dispatch
 
 
 

@@ -72,7 +72,7 @@ func (q *Escalonador) Parar() {
 	q.dispatcherStopped.Wait()
 }
 
-func (q *Escalonador) dispatch() { // finalizar a atividade ?
+func (q *Escalonador) dispatch() {
 	q.dispatcherStopped.Add(1)
 	for {
 		select {
@@ -151,10 +151,10 @@ func main() {
 	queue.Executar()
 	defer queue.Parar()
 
+	fmt.Println(queue.workers[1])
+
 	for i := 0; i < 4*runtime.NumCPU(); i++ {
 		tarefa := queue.AddTarefa(Tarefa{strconv.Itoa(i), "dddd"})
-		fmt.Printf("final job '%s'\n", tarefa.ID)
-
 	}
-
+	fmt.Printf("final job '%s'\n", tarefa.ID)
 }
