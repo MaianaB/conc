@@ -22,7 +22,10 @@ Função do escalonador:
 
 
 As notificações são emitidas pelo sistima, o escalonador vai receber o evento e tomar as devidas ações:
-* adicionar
-    Atualiza a lista de atividades
-    Adiciona um worker para determinada atividade
-* 
+* adicionar/remover atividades
+
+* adicionar/remover workers
+
+
+
+OBS: Nessa etapa do protótipo criamos as funções que são chamadas pelo escalonador de acordo com o evento.

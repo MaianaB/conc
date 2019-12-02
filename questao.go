@@ -91,13 +91,14 @@ func (q *Escalonador) dispatch() { // finalizar a atividade ?
 }
 
 // AddTarefa - Adiciona uma nova tarefa a ser processada
-func (q *Escalonador) AddTarefa(job Tarefa) {
+func (q *Escalonador) AddTarefa(job Tarefa) Tarefa {
 	q.tarefas <- job
+	return job
 }
 
-// RemoveTarefa - Adiciona uma nova tarefa a ser processada
+// RemoveTarefa - Remove uma nova tarefa a ser processada
 func (q *Escalonador) RemoveTarefa(job Tarefa) {
-	q.tarefas <- job
+	//job <- q.tarefas
 }
 
 // NewWorker - Cria novo worker
@@ -108,6 +109,17 @@ func CriarWorker(tarefa chan chan Tarefa, concluida sync.WaitGroup) *Worker {
 		tarefa:    make(chan Tarefa),
 		livre:     make(chan bool),
 	}
+}
+
+// RemoveWorker - Remove um worker da lista de workers
+func (q *Escalonador) RemoveWorker(worker *Worker) {
+	tmp := q.workers[:0]
+	for _, w := range q.workers {
+		if w != worker {
+			tmp = append(tmp, w)
+		}
+	}
+	q.workers = tmp
 }
 
 // ExecutarWorker - Processar tarefas do worker
@@ -140,6 +152,9 @@ func main() {
 	defer queue.Parar()
 
 	for i := 0; i < 4*runtime.NumCPU(); i++ {
-		queue.AddTarefa(Tarefa{strconv.Itoa(i), "dddd"})
+		tarefa := queue.AddTarefa(Tarefa{strconv.Itoa(i), "dddd"})
+		fmt.Printf("final job '%s'\n", tarefa.ID)
+
 	}
+
 }
